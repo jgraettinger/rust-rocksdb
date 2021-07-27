@@ -51,6 +51,13 @@ impl Env {
         }
     }
 
+    /// Returns a new environment which wraps and takes ownership of the provided
+    /// raw environment.
+    // Marked unsafe because ownership is transferred to the returned Env.
+    pub unsafe fn from_raw(env: *mut ffi::rocksdb_env_t) -> Self {
+        Self(Arc::new(EnvWrapper { inner: env }))
+    }
+
     /// Sets the number of background worker threads of a specific thread pool for this environment.
     /// `LOW` is the default pool.
     ///
